@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.nutritrack.companion">
+
+    <!-- Health Connect Permissions for CMF Watch 3 Pro Integration -->
+    <uses-permission android:name="android.permission.health.READ_STEPS" />
+    <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED" />
+    <uses-permission android:name="android.permission.health.READ_DISTANCE" />
+    <uses-permission android:name="android.permission.health.READ_EXERCISE" />
+
+    <!-- Internet & Network State for Firebase Cloud Firestore Sync -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Queries declaration for Android 11+ to discover Health Connect package -->
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
+
+    <application
+        android:name=".NutriTrackApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="NutriTrack Sync Companion"
+        android:theme="@style/Theme.NutriTrack">
+
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Health Connect Permissions Rationale Handling (Required by Google Play) -->
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+        </activity>
+
+        <!-- Periodic Background Sync Service (WorkManager) -->
+        <service
+            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+    </application>
+</manifest>
